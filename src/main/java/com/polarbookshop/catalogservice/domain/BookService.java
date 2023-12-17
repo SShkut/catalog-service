@@ -1,5 +1,6 @@
 package com.polarbookshop.catalogservice.domain;
 
+import com.polarbookshop.catalogservice.persistence.BookRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,17 +30,21 @@ public class BookService {
   }
 
   public void removeBookFromCatalog(String isbn) {
-    bookRepository.deleteById(isbn);
+    bookRepository.deleteByIsbn(isbn);
   }
 
   public Book editBookDetails(String isbn, Book book) {
     return bookRepository.findByIsbn(isbn)
         .map(existingBook -> {
           var bookToUpdate = new Book(
+              existingBook.id(),
               existingBook.isbn(),
               book.title(),
               book.author(),
-              book.price());
+              book.price(),
+              existingBook.createdDate(),
+              existingBook.lastModifiedDate(),
+              existingBook.version());
           return bookRepository.save(bookToUpdate);
         })
         .orElseGet(() -> addBookToCatalog(book));
