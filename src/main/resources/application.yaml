@@ -9,10 +9,6 @@ server:
 polar:
   greeting: Welcome to the local book catalog!
 spring:
-  sql:
-    init:
-      mode:
-        always
   application:
     name: catalog-service
   config:
